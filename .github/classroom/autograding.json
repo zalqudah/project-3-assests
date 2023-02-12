@@ -1,0 +1,65 @@
+{
+	"tests": [
+	{
+		"name": "Run stock tests",
+		"setup": "",
+		"run": "timeout 60 gradle test_stock",
+		"input": "",
+		"output": "",
+		"comparison": "included",
+		"timeout": 1,
+		"points": 10
+	},
+	{
+		"name": "Run stable asset tests",
+		"setup": "",
+		"run": "timeout 60 gradle test_stable_asset",
+		"input": "",
+		"output": "",
+		"comparison": "included",
+		"timeout": 1,
+		"points": 10
+	},
+	{
+		"name": "Run investment tests",
+		"setup": "",
+		"run": "timeout 60 gradle test_investment",
+		"input": "",
+		"output": "",
+		"comparison": "included",
+		"timeout": 1,
+		"points": 10
+	},
+	{
+		"name": "Run portfolio tests",
+		"setup": "",
+		"run": "timeout 60 gradle test_portfolio",
+		"input": "",
+		"output": "",
+		"comparison": "included",
+		"timeout": 1,
+		"points": 10
+	},
+	{
+		"name": "Run UI tests",
+		"setup": "",
+		"run": "timeout 60 gradle test_ui",
+		"input": "",
+		"output": "",
+		"comparison": "included",
+		"timeout": 1,
+		"points": 10
+	},
+	{
+		"name": "Run main",
+		"setup": "",
+		"run": "cat mainInput.txt | timeout 60 gradle run",
+		"input": "",
+		"output": "+--------------+-----------------+--------------------+\n| ASSET SYMBOL | AMOUNT INVESTED | VALUE IN TEN YEARS |\n+==============+=================+====================+\n| TSLA         | 10000           | 11471              |\n| CASH         | 500             | 500                |\n| TSLA         | 2000            | 2294               |\n| BABA         | 5000            | 26724              |\n+--------------+-----------------+--------------------+\n| TOTAL        | 17500           | 40989              |\n+--------------+-----------------+--------------------+\n",
+		"comparison": "included",
+		"timeout": 1,
+		"points": 30
+	}
+
+	]
+}

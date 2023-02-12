@@ -1,0 +1,15 @@
+thisFileIs.invalid
+assetData.csv
+10000
+ZZZZZZZ
+TSLA
+500
+CASH
+-2023
+2000
+TSLA
+-5000
+5000
+BABAAAAA
+BABA
+0

@@ -1,0 +1,120 @@
+plugins {
+	id 'java'
+	id 'application'
+	id 'eclipse'	
+}
+
+repositories {
+	mavenCentral()
+}
+
+final def junitJupiterGroup = 'org.junit.jupiter'
+final def junitJupiterVersion = '5.6.0'
+
+final def junitPlatformGroup = 'org.junit.platform'
+final def junitPlatformVersion = '1.4.0'
+ 
+dependencies {
+	testImplementation('org.junit.jupiter:junit-jupiter:5.6.0')
+	
+    testImplementation(group: junitJupiterGroup, name: 'junit-jupiter-api', version: junitJupiterVersion)    
+    testRuntimeOnly(group: junitJupiterGroup, name: 'junit-jupiter-engine', version: junitJupiterVersion)
+    testRuntimeOnly(group: junitJupiterGroup, name: 'junit-jupiter-params', version: junitJupiterVersion)
+
+    testRuntimeOnly(group: junitPlatformGroup, name: 'junit-platform-launcher', version: junitPlatformVersion)
+    testRuntimeOnly(group: junitPlatformGroup, name: 'junit-platform-runner', version: junitPlatformVersion)
+}
+
+// The additional eclipse.gradle that resolves the JUnit dependencies 
+eclipse {
+    project {
+        natures 'org.eclipse.buildship.core.gradleprojectnature'
+    }
+
+    classpath {
+        file {
+            whenMerged {
+                entries.findAll { isModule(it) }.each { //(1)
+                    it.entryAttributes['module'] = 'true'
+                }
+
+                entries.findAll { isSource(it) && isTestScope(it) }.each {
+                    it.entryAttributes['test'] = 'true'
+                }
+
+                entries.findAll { isLibrary(it) && isTestScope(it) }.each {
+                    it.entryAttributes['test'] = 'true'
+                }
+            }
+        }
+
+        defaultOutputDir = file('build')
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}
+
+boolean isLibrary(entry) { return entry.properties.kind.equals('lib') }
+boolean isTestScope(entry) { return entry.entryAttributes.get('gradle_used_by_scope').equals('test'); }
+
+boolean isModule(entry) { isLibrary(entry) && !isTestScope(entry); }
+boolean isSource(entry) { return entry.properties.kind.equals('src'); }
+
+task test_stock (type: Test) {
+	filter.includeTestsMatching "StockTest"
+}
+
+task test_stable_asset (type: Test) {
+	filter.includeTestsMatching "StableAssetTest"
+}
+
+task test_investment (type: Test) {
+	filter.includeTestsMatching "InvestmentTest"
+}
+
+task test_portfolio (type: Test) {
+	filter.includeTestsMatching "PortfolioTest"
+}
+
+task test_ui (type: Test) {
+	filter.includeTestsMatching "UITest"
+}
+
+tasks.withType(Test)
+{
+	useJUnitPlatform()
+	outputs.upToDateWhen {false}
+	testLogging {
+		exceptionFormat = 'full'
+		events "passed", "skipped", "failed", "standardOut", "standardError"
+	}
+}
+
+sourceSets {
+    if (project.gradle.startParameter.taskNames.contains("test_stock")) {
+        test.java.exclude '**/StableAssetTest*'
+        test.java.exclude '**/InvestmentTest*'
+        test.java.exclude '**/PortfolioTest*'
+        test.java.exclude '**/UITest*'
+    }
+    else if (project.gradle.startParameter.taskNames.contains("test_stable_asset")) {
+        test.java.exclude '**/StockTest*'
+        test.java.exclude '**/InvestmentTest*'
+        test.java.exclude '**/PortfolioTest*'
+        test.java.exclude '**/UITest*'
+    }
+    else if (project.gradle.startParameter.taskNames.contains("test_investment")) {
+        test.java.exclude '**/PortfolioTest*'
+        test.java.exclude '**/UITest*'
+    }
+    else if (project.gradle.startParameter.taskNames.contains("test_portfolio")) {
+        test.java.exclude '**/UITest*'
+    }
+}
+
+mainClassName = "Main"
+sourceSets.main.java.srcDirs = ['src/main/java']
+
+run {
+	standardInput = System.in
+}
