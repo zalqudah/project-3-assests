@@ -128,7 +128,7 @@ Available assets for investment
 	Proctor and Gamble (PG)
 Enter the amount to invest in dollars: <b>1000</b>
 Enter the asset symbol to invest in: <b>TSLAAAA</b>
-FOO is not in the input, or had invalid input data. Choose something else to invest in.
+TSLAAAA is not in the input, or had invalid input data. Choose something else to invest in.
 <b>TSLA</b>
 Investing 1000 in TSLA has an expected future value of: 1147
 Enter the amount to invest in dollars: <b>-1</b>
